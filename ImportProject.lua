@@ -1,484 +1,102 @@
--- ==========================================
--- SCRIPT PREMIUM: STUDIO LITE RBXM IMPORTER
--- Theme: Blood Maroon Animated (🔱 Edition)
--- Project By: Gon (PERFECT FULLSCREEN LOADING)
--- ==========================================
+-- ===================================================
+-- 🔱 PREMIUM RBXM IMPORTER (STUDIO LITE)
+-- ⚠️ MAXIMUM SECURITY: FULL OBFUSCATION APPLIED
+-- ===================================================
 
-print("===================================")
-print(" 🔱 Script Import Project By Gon 🔱 ")
-print("===================================")
+local _1=game;local _2=Instance.new;local _3=Color3.fromRGB;local _4=UDim2.new;local _5=UDim.new;
+local _6=ColorSequence.new;local _7=ColorSequenceKeypoint.new;local _8=TweenInfo.new;local _9=Enum;
+local _10=pcall;local _11=task.spawn;local _12=task.wait;local _13=task.cancel;local _14=string.char;
+local _15=string.match;local _16=string.find;local _17=table.insert;local _18=string.lower;
+local _19=tostring;local _20=warn;local _21=getcustomasset;local _22=listfiles;
 
-pcall(function()
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "🔱 Initializing...",
-        Text = "Memuat Script Project By Gon",
-        Duration = 3,
-        Button1 = "OK"
-    })
+local function _E(t) local s="" for _,v in ipairs(t) do s=s.._14(v) end return s end
+
+local _S1=_E({83,116,97,114,116,101,114,71,117,105}) local _S2=_E({83,101,110,100,78,111,116,105,102,105,99,97,116,105,111,110})
+local _S3=_E({67,111,114,101,71,117,105}) local _S4=_E({84,119,101,101,110,83,101,114,118,105,99,101})
+local _S5=_E({70,114,97,109,101}) local _S6=_E({84,101,120,116,76,97,98,101,108})
+local _S7=_E({84,101,120,116,66,117,116,116,111,110}) local _S8=_E({85,73,67,111,114,110,101,114})
+local _S9=_E({85,73,83,116,114,111,107,101}) local _S10=_E({85,73,71,114,97,100,105,101,110,116})
+local _S11=_E({84,101,120,116,66,111,120}) local _S12=_E({83,99,114,111,108,108,105,110,103,70,114,97,109,101})
+local _S13=_E({85,73,76,105,115,116,76,97,121,111,117,116}) local _S14=_E({83,99,114,101,101,110,71,117,105})
+local _S15=_E({66,108,111,111,100,83,116,117,100,105,111,73,109,112,111,114,116,101,114})
+local _T1=_E({80,114,111,106,101,99,116,32,66,121,32,71,111,110}) local _T2=_E({83,84,85,68,73,79,32,76,73,84,69,32,73,77,80,79,82,84,69,82})
+local _T3=_E({77,111,104,111,110,32,84,117,110,103,103,117}) local _T4=_E({83,67,65,78,32,70,73,76,69})
+
+_10(function() _1:GetService(_S1):SetCore(_S2,{Title=_E({240,159,148,177}),Text=_E({73,110,105,116,105,97,108,105,122,105,110,103,46,46,46}),Duration=3}) end)
+local _CG=_1:GetService(_S3) if _CG:FindFirstChild(_S15) then _CG[_S15]:Destroy() end
+local _TS=_1:GetService(_S4) local _SG=_2(_S14) _SG.Name=_S15 _SG.IgnoreGuiInset=true _SG.Parent=_CG
+
+local _FL=_2(_S5) _FL.Size=_4(1,0,1,0) _FL.Position=_4(0,0,0,0) _FL.BackgroundColor3=_3(10,8,8) _FL.BorderSizePixel=0 _FL.Active=true _FL.Parent=_SG
+local _CC=_2(_S5) _CC.Size=_4(0,400,0,200) _CC.Position=_4(0.5,-200,0.5,-100) _CC.BackgroundTransparency=1 _CC.Parent=_FL
+local function _cLT(t,y,f,s,c) local l=_2(_S6) l.Size=_4(1,0,0,20) l.Position=_4(0,0,0,y) l.BackgroundTransparency=1 l.Text=t l.TextColor3=c l.Font=f l.TextSize=s l.TextXAlignment=_9.TextXAlignment.Center l.Parent=_CC return l end
+
+_cLT(_E({61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61}),15,_9.Font.Gotham,14,_3(150,50,50))
+_cLT('"'.._T2..'"',40,_9.Font.GothamBlack,16,_3(255,200,200)) _cLT('"'.._T1..'"',65,_9.Font.GothamBold,15,_3(255,50,50))
+_cLT(_E({61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61}),90,_9.Font.Gotham,14,_3(150,50,50))
+local _SL=_cLT(_T3,130,_9.Font.GothamSemibold,13,_3(200,200,200))
+
+local _BB=_2(_S5) _BB.Size=_4(0.8,0,0,15) _BB.Position=_4(0.1,0,0,160) _BB.BackgroundColor3=_3(25,15,15) _BB.Parent=_CC
+local _BBC=_2(_S8) _BBC.CornerRadius=_5(1,0) _BBC.Parent=_BB local _BBS=_2(_S9) _BBS.ApplyStrokeMode=_9.ApplyStrokeMode.Border _BBS.Color=_3(100,30,30) _BBS.Thickness=1 _BBS.Parent=_BB
+local _BF=_2(_S5) _BF.Size=_4(0,0,1,0) _BF.BackgroundColor3=_3(255,255,255) _BF.BorderSizePixel=0 _BF.Parent=_BB
+local _BFC=_2(_S8) _BFC.CornerRadius=_5(1,0) _BFC.Parent=_BF local _BG=_2(_S10) _BG.Color=_6({_7(0,_3(150,0,0)),_7(1,_3(255,30,30))}) _BG.Parent=_BF
+
+local _OB=_2(_S7) _OB.Size=_4(0,45,0,45) _OB.Position=_4(0.05,0,0.5,-22) _OB.BackgroundColor3=_3(15,12,12) _OB.Text=_E({240,159,148,177}) _OB.TextColor3=_3(255,50,50) _OB.TextSize=25 _OB.Font=_9.Font.GothamBold _OB.Active=true _OB.Draggable=true _OB.Visible=false _OB.Parent=_SG
+local _OBC=_2(_S8) _OBC.CornerRadius=_5(0,10) _OBC.Parent=_OB local _OBS=_2(_S9) _OBS.ApplyStrokeMode=_9.ApplyStrokeMode.Border _OBS.Color=_3(255,255,255) _OBS.Thickness=2.5 _OBS.Parent=_OB
+local _OG=_2(_S10) _OG.Color=_6({_7(0,_3(90,0,0)),_7(0.5,_3(255,20,20)),_7(1,_3(90,0,0))}) _OG.Parent=_OBS
+
+local _MF=_2(_S5) _MF.Size=_4(0,320,0,410) _MF.Position=_4(0.5,-160,0.5,-205) _MF.BackgroundColor3=_3(18,15,15) _MF.BorderSizePixel=0 _MF.Active=true _MF.Draggable=true _MF.Visible=false _MF.ClipsDescendants=true _MF.Parent=_SG
+local _MC=_2(_S8) _MC.CornerRadius=_5(0,10) _MC.Parent=_MF local _MS=_2(_S9) _MS.ApplyStrokeMode=_9.ApplyStrokeMode.Border _MS.Color=_3(255,255,255) _MS.Thickness=2 _MS.Parent=_MF
+local _MG=_2(_S10) _MG.Color=_6({_7(0,_3(90,0,0)),_7(0.5,_3(255,20,20)),_7(1,_3(90,0,0))}) _MG.Parent=_MS
+
+local _SB=_2(_S7) _SB.Size=_4(0.9,0,0,35) _SB.Position=_4(0.05,0,0,50) _SB.BackgroundColor3=_3(255,255,255) _SB.Text="" _SB.Parent=_MF
+local _SC=_2(_S8) _SC.CornerRadius=_5(0,5) _SC.Parent=_SB local _SGd=_2(_S10) _SGd.Color=_6({_7(0,_3(90,0,0)),_7(0.5,_3(200,20,20)),_7(1,_3(90,0,0))}) _SGd.Parent=_SB
+local _SLb=_2(_S6) _SLb.Size=_4(1,0,1,0) _SLb.BackgroundTransparency=1 _SLb.Text=_T4 _SLb.TextColor3=_3(255,255,255) _SLb.Font=_9.Font.GothamBold _SLb.TextSize=14 _SLb.ZIndex=2 _SLb.Parent=_SB
+
+local _SBox=_2(_S11) _SBox.Size=_4(0.9,0,0,30) _SBox.Position=_4(0.05,0,0,95) _SBox.BackgroundColor3=_3(25,18,18) _SBox.TextColor3=_3(255,200,200) _SBox.PlaceholderText=_E({240,159,148,141,32,83,101,97,114,99,104,46,46,46}) _SBox.PlaceholderColor3=_3(150,50,50) _SBox.Font=_9.Font.Gotham _SBox.TextSize=12 _SBox.Text="" _SBox.Parent=_MF
+local _SBC=_2(_S8) _SBC.CornerRadius=_5(0,5) _SBC.Parent=_SBox local _SBS=_2(_S9) _SBS.ApplyStrokeMode=_9.ApplyStrokeMode.Border _SBS.Color=_3(100,30,30) _SBS.Thickness=1.5 _SBS.Parent=_SBox
+
+local _HF=_2(_S5) _HF.Size=_4(1,0,0,40) _HF.BackgroundTransparency=1 _HF.Parent=_MF local _HL=_2(_S5) _HL.Size=_4(1,0,0,1) _HL.Position=_4(0,0,1,0) _HL.BackgroundColor3=_3(40,20,20) _HL.BorderSizePixel=0 _HL.Parent=_HF
+local _TL=_2(_S6) _TL.Size=_4(1,-50,1,0) _TL.Position=_4(0,15,0,0) _TL.BackgroundTransparency=1 _TL.Text=_E({240,159,148,177,32}).._T2 _TL.TextColor3=_3(255,100,100) _TL.Font=_9.Font.GothamBlack _TL.TextSize=14 _TL.TextXAlignment=_9.TextXAlignment.Left _TL.Parent=_HF
+local _CB=_2(_S7) _CB.Size=_4(0,30,0,30) _CB.Position=_4(1,-35,0,5) _CB.BackgroundTransparency=1 _CB.Text="X" _CB.TextColor3=_3(255,50,50) _CB.Font=_9.Font.GothamBold _CB.TextSize=16 _CB.Parent=_HF
+
+local _SF=_2(_S12) _SF.Size=_4(0.9,0,0,260) _SF.Position=_4(0.05,0,0,135) _SF.BackgroundColor3=_3(22,18,18) _SF.ScrollBarThickness=3 _SF.ScrollBarImageColor3=_3(150,50,50) _SF.Parent=_MF
+local _SFC=_2(_S8) _SFC.CornerRadius=_5(0,5) _SFC.Parent=_SF local _UILL=_2(_S13) _UILL.Padding=_5(0,6) _UILL.HorizontalAlignment=_9.HorizontalAlignment.Center _UILL.Parent=_SF
+
+_11(function() local r=0 while _12() do if not _SG.Parent then break end r=(r+2)%360 _OG.Rotation=r _MG.Rotation=r _SGd.Rotation=r end end)
+_11(function() local d={"",".","..","..."} local i=1 local tA=_11(function() while _12(0.4) do if not _FL.Parent then break end _SL.Text=_T3..d[i] i=i+1 if i>4 then i=1 end end end)
+    local tw=_TS:Create(_BF,_8(3.0,_9.EasingStyle.Sine,_9.EasingDirection.Out),{Size=_4(1,0,1,0)}) tw:Play() tw.Completed:Wait() _13(tA) _SL.Text=_E({83,101,108,101,115,97,105,33}) _SL.TextColor3=_3(100,255,100) _12(0.5)
+    local fT=_8(1.0,_9.EasingStyle.Quad,_9.EasingDirection.Out) for _,o in pairs(_CC:GetDescendants()) do if o:IsA(_S6) then _TS:Create(o,fT,{TextTransparency=1}):Play() elseif o:IsA(_S5) then _TS:Create(o,fT,{BackgroundTransparency=1}):Play() elseif o:IsA(_S9) then _TS:Create(o,fT,{Transparency=1}):Play() end end
+    local fM=_TS:Create(_FL,fT,{BackgroundTransparency=1}) fM:Play() fM.Completed:Wait() _FL:Destroy() _OB.Size=_4(0,0,0,0) _OB.Visible=true _TS:Create(_OB,_8(0.4,_9.EasingStyle.Back),{Size=_4(0,45,0,45)}):Play()
 end)
 
-if game:GetService("CoreGui"):FindFirstChild("BloodStudioImporter") then
-    game:GetService("CoreGui").BloodStudioImporter:Destroy()
-end
+_OB.MouseButton1Click:Connect(function() _OB.Visible=false _MF.Visible=true _MF.Size=_4(0,0,0,0) _MF.Position=_4(0.5,0,0.5,0) _TS:Create(_MF,_8(0.4,_9.EasingStyle.Back,_9.EasingDirection.Out),{Size=_4(0,320,0,410),Position=_4(0.5,-160,0.5,-205)}):Play() end)
+_CB.MouseButton1Click:Connect(function() local tw=_TS:Create(_MF,_8(0.3,_9.EasingStyle.Quad,_9.EasingDirection.In),{Size=_4(0,0,0,0),Position=_4(0.5,0,0.5,0)}) tw:Play() tw.Completed:Wait() _MF.Visible=false _OB.Visible=true end)
 
-local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "BloodStudioImporter"
--- [PERBAIKAN PENTING]: Ini memaksa UI mengabaikan batas atas layar (notch)
-ScreenGui.IgnoreGuiInset = true 
-ScreenGui.Parent = CoreGui
-
--- ==========================================
--- [1] FULL SCREEN LOADING SYSTEM (SEKARANG BENAR-BENAR FULL)
--- ==========================================
-local FullScreenLoad = Instance.new("Frame")
-FullScreenLoad.Size = UDim2.new(1, 0, 1, 0) -- 100% Layar (Karena IgnoreGuiInset sudah aktif)
-FullScreenLoad.Position = UDim2.new(0, 0, 0, 0)
-FullScreenLoad.BackgroundColor3 = Color3.fromRGB(10, 8, 8)
-FullScreenLoad.BorderSizePixel = 0
-FullScreenLoad.Active = true 
-FullScreenLoad.Parent = ScreenGui
-
--- Kotak pembungkus agar teks tetap rapi di tengah
-local CenterContainer = Instance.new("Frame")
-CenterContainer.Size = UDim2.new(0, 400, 0, 200)
-CenterContainer.Position = UDim2.new(0.5, -200, 0.5, -100)
-CenterContainer.BackgroundTransparency = 1
-CenterContainer.Parent = FullScreenLoad
-
-local function CreateLoadText(text, posY, font, size, color)
-    local lbl = Instance.new("TextLabel")
-    lbl.Size = UDim2.new(1, 0, 0, 20)
-    lbl.Position = UDim2.new(0, 0, 0, posY)
-    lbl.BackgroundTransparency = 1
-    lbl.Text = text
-    lbl.TextColor3 = color
-    lbl.Font = font
-    lbl.TextSize = size
-    lbl.TextXAlignment = Enum.TextXAlignment.Center
-    lbl.Parent = CenterContainer
-    return lbl
-end
-
-CreateLoadText("========================================", 15, Enum.Font.Gotham, 14, Color3.fromRGB(150, 50, 50))
-CreateLoadText('" IMPORTER RBXM FILE STUDIO LITE "', 40, Enum.Font.GothamBlack, 16, Color3.fromRGB(255, 200, 200))
-CreateLoadText('" BY GON "', 65, Enum.Font.GothamBold, 15, Color3.fromRGB(255, 50, 50)) 
-CreateLoadText("========================================", 90, Enum.Font.Gotham, 14, Color3.fromRGB(150, 50, 50))
-
-local StatusLabel = CreateLoadText("Mohon Tunggu", 130, Enum.Font.GothamSemibold, 13, Color3.fromRGB(200, 200, 200))
-
--- [PERBAIKAN PROGRESS BAR] - Sekarang melengkung
-local BarBg = Instance.new("Frame")
-BarBg.Size = UDim2.new(0.8, 0, 0, 15)
-BarBg.Position = UDim2.new(0.1, 0, 0, 160)
-BarBg.BackgroundColor3 = Color3.fromRGB(25, 15, 15)
-BarBg.Parent = CenterContainer
-
-local BarBgCorner = Instance.new("UICorner")
-BarBgCorner.CornerRadius = UDim.new(1, 0) -- Lengkungan Penuh (Pil)
-BarBgCorner.Parent = BarBg
-
-local BarBgStroke = Instance.new("UIStroke")
-BarBgStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-BarBgStroke.Color = Color3.fromRGB(100, 30, 30)
-BarBgStroke.Thickness = 1
-BarBgStroke.Parent = BarBg
-
-local BarFill = Instance.new("Frame")
-BarFill.Size = UDim2.new(0, 0, 1, 0)
-BarFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-BarFill.BorderSizePixel = 0
-BarFill.Parent = BarBg
-
-local BarFillCorner = Instance.new("UICorner")
-BarFillCorner.CornerRadius = UDim.new(1, 0) -- Mengikuti kelengkungan Bg
-BarFillCorner.Parent = BarFill
-
-local BarGradient = Instance.new("UIGradient")
-BarGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(150, 0, 0)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 30, 30))
-})
-BarGradient.Parent = BarFill
-
--- ==========================================
--- [2] TOMBOL START (KOTAK + 🔱)
--- ==========================================
-local OpenBtn = Instance.new("TextButton")
-OpenBtn.Size = UDim2.new(0, 45, 0, 45) 
-OpenBtn.Position = UDim2.new(0.05, 0, 0.5, -22)
-OpenBtn.BackgroundColor3 = Color3.fromRGB(15, 12, 12)
-OpenBtn.Text = "🔱"
-OpenBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
-OpenBtn.TextSize = 25
-OpenBtn.Font = Enum.Font.GothamBold
-OpenBtn.Active = true
-OpenBtn.Draggable = true
-OpenBtn.Visible = false
-OpenBtn.Parent = ScreenGui
-
-local OpenBtnCorner = Instance.new("UICorner")
-OpenBtnCorner.CornerRadius = UDim.new(0, 10) 
-OpenBtnCorner.Parent = OpenBtn
-
-local OpenBtnStroke = Instance.new("UIStroke")
-OpenBtnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border 
-OpenBtnStroke.Color = Color3.fromRGB(255, 255, 255) 
-OpenBtnStroke.Thickness = 2.5
-OpenBtnStroke.Parent = OpenBtn
-
-local OpenGradient = Instance.new("UIGradient")
-OpenGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(90, 0, 0)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 20, 20)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(90, 0, 0))
-})
-OpenGradient.Parent = OpenBtnStroke
-
--- ==========================================
--- [3] PANEL UTAMA & ISI
--- ==========================================
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 320, 0, 410) 
-MainFrame.Position = UDim2.new(0.5, -160, 0.5, -205)
-MainFrame.BackgroundColor3 = Color3.fromRGB(18, 15, 15)
-MainFrame.BorderSizePixel = 0
-MainFrame.Active = true
-MainFrame.Draggable = true
-MainFrame.Visible = false 
-MainFrame.ClipsDescendants = true
-MainFrame.Parent = ScreenGui
-
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 10)
-MainCorner.Parent = MainFrame
-
-local MainStroke = Instance.new("UIStroke")
-MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-MainStroke.Color = Color3.fromRGB(255, 255, 255)
-MainStroke.Thickness = 2
-MainStroke.Parent = MainFrame
-
-local MainGradient = Instance.new("UIGradient")
-MainGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(90, 0, 0)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 20, 20)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(90, 0, 0))
-})
-MainGradient.Parent = MainStroke
-
-local ScanBtn = Instance.new("TextButton")
-ScanBtn.Size = UDim2.new(0.9, 0, 0, 35)
-ScanBtn.Position = UDim2.new(0.05, 0, 0, 50)
-ScanBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255) 
-ScanBtn.Text = "" 
-ScanBtn.Parent = MainFrame
-
-local ScanCorner = Instance.new("UICorner")
-ScanCorner.CornerRadius = UDim.new(0, 5)
-ScanCorner.Parent = ScanBtn
-
-local ScanGradient = Instance.new("UIGradient")
-ScanGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(90, 0, 0)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 20, 20)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(90, 0, 0))
-})
-ScanGradient.Parent = ScanBtn
-
-local ScanLabel = Instance.new("TextLabel")
-ScanLabel.Size = UDim2.new(1, 0, 1, 0)
-ScanLabel.BackgroundTransparency = 1
-ScanLabel.Text = "SCAN FILE"
-ScanLabel.TextColor3 = Color3.fromRGB(255, 255, 255) 
-ScanLabel.Font = Enum.Font.GothamBold
-ScanLabel.TextSize = 14
-ScanLabel.ZIndex = 2 
-ScanLabel.Parent = ScanBtn
-
-local SearchBox = Instance.new("TextBox")
-SearchBox.Size = UDim2.new(0.9, 0, 0, 30)
-SearchBox.Position = UDim2.new(0.05, 0, 0, 95)
-SearchBox.BackgroundColor3 = Color3.fromRGB(25, 18, 18)
-SearchBox.TextColor3 = Color3.fromRGB(255, 200, 200)
-SearchBox.PlaceholderText = "🔍 Cari nama file..."
-SearchBox.PlaceholderColor3 = Color3.fromRGB(150, 50, 50)
-SearchBox.Font = Enum.Font.Gotham
-SearchBox.TextSize = 12
-SearchBox.Text = ""
-SearchBox.Parent = MainFrame
-
-local SearchCorner = Instance.new("UICorner")
-SearchCorner.CornerRadius = UDim.new(0, 5)
-SearchCorner.Parent = SearchBox
-
-local SearchStroke = Instance.new("UIStroke")
-SearchStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-SearchStroke.Color = Color3.fromRGB(100, 30, 30)
-SearchStroke.Thickness = 1.5
-SearchStroke.Parent = SearchBox
-
-local HeaderFrame = Instance.new("Frame")
-HeaderFrame.Size = UDim2.new(1, 0, 0, 40)
-HeaderFrame.BackgroundTransparency = 1 
-HeaderFrame.Parent = MainFrame
-
-local HeaderLine = Instance.new("Frame")
-HeaderLine.Size = UDim2.new(1, 0, 0, 1)
-HeaderLine.Position = UDim2.new(0, 0, 1, 0)
-HeaderLine.BackgroundColor3 = Color3.fromRGB(40, 20, 20)
-HeaderLine.BorderSizePixel = 0
-HeaderLine.Parent = HeaderFrame
-
-local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Size = UDim2.new(1, -50, 1, 0)
-TitleLabel.Position = UDim2.new(0, 15, 0, 0)
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "🔱 STUDIO LITE IMPORTER"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
-TitleLabel.Font = Enum.Font.GothamBlack
-TitleLabel.TextSize = 14
-TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-TitleLabel.Parent = HeaderFrame
-
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, 30, 0, 30)
-CloseBtn.Position = UDim2.new(1, -35, 0, 5)
-CloseBtn.BackgroundTransparency = 1
-CloseBtn.Text = "X" 
-CloseBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
-CloseBtn.Font = Enum.Font.GothamBold
-CloseBtn.TextSize = 16
-CloseBtn.Parent = HeaderFrame
-
-local ScrollFrame = Instance.new("ScrollingFrame")
-ScrollFrame.Size = UDim2.new(0.9, 0, 0, 260)
-ScrollFrame.Position = UDim2.new(0.05, 0, 0, 135)
-ScrollFrame.BackgroundColor3 = Color3.fromRGB(22, 18, 18)
-ScrollFrame.ScrollBarThickness = 3
-ScrollFrame.ScrollBarImageColor3 = Color3.fromRGB(150, 50, 50)
-ScrollFrame.Parent = MainFrame
-
-local ScrollCorner = Instance.new("UICorner")
-ScrollCorner.CornerRadius = UDim.new(0, 5)
-ScrollCorner.Parent = ScrollFrame
-
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Padding = UDim.new(0, 6)
-UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-UIListLayout.Parent = ScrollFrame
-
--- ==========================================
--- [4] ANIMASI LOOP & LOADING LOGIC
--- ==========================================
-task.spawn(function()
-    local rot = 0
-    while task.wait() do
-        if not ScreenGui.Parent then break end
-        rot = (rot + 2) % 360
-        OpenGradient.Rotation = rot
-        MainGradient.Rotation = rot
-        ScanGradient.Rotation = rot 
-    end
-end)
-
-task.spawn(function()
-    local dots = {"", ".", "..", "..."}
-    local dotIndex = 1
+local _ls={}
+local function _cFI(fN)
+    local _IF=_2(_S5) _IF.Size=_4(0.96,0,0,40) _IF.BackgroundColor3=_3(35,25,25) _IF.Parent=_SF local _IC=_2(_S8) _IC.CornerRadius=_5(0,5) _IC.Parent=_IF
+    local _FNL=_2(_S6) _FNL.Size=_4(0.65,0,1,0) _FNL.Position=_4(0,10,0,0) _FNL.BackgroundTransparency=1 _FNL.Text=fN _FNL.TextColor3=_3(255,200,200) _FNL.TextXAlignment=_9.TextXAlignment.Left _FNL.Font=_9.Font.GothamSemibold _FNL.TextSize=12 _FNL.TextTruncate=_9.TextTruncate.AtEnd _FNL.Parent=_IF
+    local _IB=_2(_S7) _IB.Size=_4(0.28,0,0.7,0) _IB.Position=_4(0.68,0,0.15,0) _IB.BackgroundColor3=_3(150,30,30) _IB.TextColor3=_3(255,255,255) _IB.Text=_E({73,77,80,79,82,84}) _IB.Font=_9.Font.GothamBold _IB.TextSize=11 _IB.Parent=_IF local _ICo=_2(_S8) _ICo.CornerRadius=_5(0,4) _ICo.Parent=_IB
     
-    local txtAnim = task.spawn(function()
-        while task.wait(0.4) do
-            if not FullScreenLoad.Parent then break end
-            StatusLabel.Text = "Mohon Tunggu" .. dots[dotIndex]
-            dotIndex = dotIndex + 1
-            if dotIndex > 4 then dotIndex = 1 end
-        end
-    end)
-    
-    local tweenInfo = TweenInfo.new(5.0, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-    local tween = TweenService:Create(BarFill, tweenInfo, {Size = UDim2.new(1, 0, 1, 0)})
-    tween:Play()
-    tween.Completed:Wait()
-    
-    task.cancel(txtAnim)
-    StatusLabel.Text = "Selesai!"
-    StatusLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
-    task.wait(0.5)
-    
-    -- [PERBAIKAN FADE OUT] - Menghilangkan Bug Kotak Hantu
-    local fadeTweenInfo = TweenInfo.new(1.0, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local fadeGoals = {BackgroundTransparency = 1}
-    
-    -- Fade teks dan bar di dalam container
-    for _, obj in pairs(CenterContainer:GetDescendants()) do
-        if obj:IsA("TextLabel") then
-            TweenService:Create(obj, fadeTweenInfo, {TextTransparency = 1}):Play()
-        elseif obj:IsA("Frame") then
-            TweenService:Create(obj, fadeTweenInfo, {BackgroundTransparency = 1}):Play()
-        elseif obj:IsA("UIStroke") then
-            TweenService:Create(obj, fadeTweenInfo, {Transparency = 1}):Play()
-        end
-    end
-    
-    -- Fade background utama
-    local fadeMain = TweenService:Create(FullScreenLoad, fadeTweenInfo, fadeGoals)
-    fadeMain:Play()
-    fadeMain.Completed:Wait()
-    
-    FullScreenLoad:Destroy() 
-    
-    OpenBtn.Size = UDim2.new(0, 0, 0, 0)
-    OpenBtn.Visible = true
-    TweenService:Create(OpenBtn, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 45, 0, 45)}):Play()
-end)
-
--- ==========================================
--- [5] LOGIKA TOMBOL PANEL
--- ==========================================
-OpenBtn.MouseButton1Click:Connect(function()
-    OpenBtn.Visible = false
-    MainFrame.Visible = true
-    MainFrame.Size = UDim2.new(0, 0, 0, 0)
-    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 320, 0, 410),
-        Position = UDim2.new(0.5, -160, 0.5, -205)
-    }):Play()
-end)
-
-CloseBtn.MouseButton1Click:Connect(function()
-    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { 
-        Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(0.5, 0, 0.5, 0) 
-    })
-    tween:Play()
-    tween.Completed:Wait()
-    MainFrame.Visible = false
-    OpenBtn.Visible = true
-end)
-
--- ==========================================
--- [6] 🌟 LOGIKA IMPORT (NATIVE ROBLOX ENGINE) 🌟
--- ==========================================
-local listSemuaFile = {}
-
-local function CreateFileItem(fileName)
-    local ItemFrame = Instance.new("Frame")
-    ItemFrame.Size = UDim2.new(0.96, 0, 0, 40)
-    ItemFrame.BackgroundColor3 = Color3.fromRGB(35, 25, 25)
-    ItemFrame.Parent = ScrollFrame
-    
-    local ItemCorner = Instance.new("UICorner")
-    ItemCorner.CornerRadius = UDim.new(0, 5)
-    ItemCorner.Parent = ItemFrame
-    
-    local FileNameLabel = Instance.new("TextLabel")
-    FileNameLabel.Size = UDim2.new(0.65, 0, 1, 0)
-    FileNameLabel.Position = UDim2.new(0, 10, 0, 0)
-    FileNameLabel.BackgroundTransparency = 1
-    FileNameLabel.Text = fileName
-    FileNameLabel.TextColor3 = Color3.fromRGB(255, 200, 200)
-    FileNameLabel.TextXAlignment = Enum.TextXAlignment.Left
-    FileNameLabel.Font = Enum.Font.GothamSemibold
-    FileNameLabel.TextSize = 12
-    FileNameLabel.TextTruncate = Enum.TextTruncate.AtEnd
-    FileNameLabel.Parent = ItemFrame
-    
-    local InsertBtn = Instance.new("TextButton")
-    InsertBtn.Size = UDim2.new(0.28, 0, 0.7, 0)
-    InsertBtn.Position = UDim2.new(0.68, 0, 0.15, 0)
-    InsertBtn.BackgroundColor3 = Color3.fromRGB(150, 30, 30)
-    InsertBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    InsertBtn.Text = "IMPORT"
-    InsertBtn.Font = Enum.Font.GothamBold
-    InsertBtn.TextSize = 11
-    InsertBtn.Parent = ItemFrame
-    
-    local InsertCorner = Instance.new("UICorner")
-    InsertCorner.CornerRadius = UDim.new(0, 4)
-    InsertCorner.Parent = InsertBtn
-    
-    InsertBtn.MouseButton1Click:Connect(function()
-        InsertBtn.Text = "LOADING..."
-        InsertBtn.BackgroundColor3 = Color3.fromRGB(200, 100, 0)
-        
-        local success, err = pcall(function()
-            local customLink = getcustomasset(fileName)
-            local objects = game:GetObjects(customLink)
-            
-            local player = game.Players.LocalPlayer
-            local char = player.Character or player.CharacterAdded:Wait()
-            local root = char:FindFirstChild("HumanoidRootPart")
-            
-            for _, obj in pairs(objects) do
-                obj.Parent = workspace 
-                
-                if root then
-                    pcall(function()
-                        if obj:IsA("Model") then
-                            obj:MoveTo(root.Position + Vector3.new(0, 0, -10))
-                        elseif obj:IsA("BasePart") then
-                            obj.CFrame = root.CFrame * CFrame.new(0, 0, -10)
-                        end
-                    end)
-                end
-                task.wait(0.05) 
-            end
+    _IB.MouseButton1Click:Connect(function()
+        _IB.Text="..." _IB.BackgroundColor3=_3(200,100,0)
+        local s,e=_10(function()
+            local cL=_21(fN) local ob=_1:GetObjects(cL) local p=_1.Players.LocalPlayer local c=p.Character or p.CharacterAdded:Wait() local rt=c:FindFirstChild(_E({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
+            for _,o in pairs(ob) do o.Parent=workspace if rt then _10(function() if o:IsA(_E({77,111,100,101,108})) then o:MoveTo(rt.Position+Vector3.new(0,0,-10)) elseif o:IsA(_E({66,97,115,101,80,97,114,116})) then o.CFrame=rt.CFrame*CFrame.new(0,0,-10) end end) end _12(0.05) end
         end)
-        
-        if success then
-            InsertBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 50)
-            InsertBtn.Text = "SUCCESS"
-        else
-            warn("❌ [PROJECT BY GON] Gagal Import Aset: " .. tostring(fileName))
-            warn("Penyebab Error: " .. tostring(err))
-            InsertBtn.BackgroundColor3 = Color3.fromRGB(200, 30, 30)
-            InsertBtn.Text = "ERROR"
-        end
-        
-        wait(2)
-        InsertBtn.BackgroundColor3 = Color3.fromRGB(150, 30, 30)
-        InsertBtn.Text = "IMPORT"
+        if s then _IB.BackgroundColor3=_3(0,150,50) _IB.Text=_E({83,85,67,67,69,83,83}) else _20(_E({69,82,82,79,82})..": ".._19(e)) _IB.BackgroundColor3=_3(200,30,30) _IB.Text=_E({69,82,82,79,82}) end
+        _12(2) _IB.BackgroundColor3=_3(150,30,30) _IB.Text=_E({73,77,80,79,82,84})
     end)
 end
 
-local function RefreshDaftarFile(kataKunci)
-    for _, child in pairs(ScrollFrame:GetChildren()) do
-        if child:IsA("Frame") then child:Destroy() end
-    end
-    local hitung = 0
-    for _, namaFile in ipairs(listSemuaFile) do
-        if kataKunci == "" or string.find(string.lower(namaFile), string.lower(kataKunci)) then
-            CreateFileItem(namaFile)
-            hitung = hitung + 1
-        end
-    end
-    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, hitung * 46)
+local function _rDF(k)
+    for _,c in pairs(_SF:GetChildren()) do if c:IsA(_S5) then c:Destroy() end end local h=0
+    for _,n in ipairs(_ls) do if k=="" or _16(_18(n),_18(k)) then _cFI(n) h=h+1 end end _SF.CanvasSize=_4(0,0,0,h*46)
 end
 
-SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-    RefreshDaftarFile(SearchBox.Text)
-end)
-
-ScanBtn.MouseButton1Click:Connect(function()
-    ScanLabel.Text = "SCANNING..." 
-    local success, files = pcall(function() return listfiles("") end)
-    
-    if success and files then
-        listSemuaFile = {} 
-        for _, filePath in pairs(files) do
-            if string.match(filePath, "%.rbxm$") or string.match(filePath, "%.rbxmx$") then
-                local fileName = string.match(filePath, "([^/\\]+)$") or filePath
-                table.insert(listSemuaFile, fileName)
-            end
-        end
-        RefreshDaftarFile(SearchBox.Text)
-        ScanLabel.Text = #listSemuaFile .. " FILES FOUND"
-    else
-        ScanLabel.Text = "SCAN FAILED"
-    end
-    
-    wait(1.5)
-    ScanLabel.Text = "SCAN FILE"
+_SBox:GetPropertyChangedSignal("Text"):Connect(function() _rDF(_SBox.Text) end)
+_SB.MouseButton1Click:Connect(function()
+    _SLb.Text="..." local s,f=_10(function() return _22("") end)
+    if s and f then _ls={} for _,p in pairs(f) do if _15(p,_E({37,46,114,98,120,109,36})) or _15(p,_E({37,46,114,98,120,109,120,36})) then local fn=_15(p,_E({40,91,94,47,92,92,93,43,41,36})) or p _17(_ls,fn) end end _rDF(_SBox.Text) _SLb.Text=#_ls.." ".._E({70,79,85,78,68}) else _SLb.Text=_E({69,82,82,79,82}) end
+    _12(1.5) _SLb.Text=_T4
 end)
