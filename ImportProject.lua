@@ -33,7 +33,7 @@ end)
 
 local OWNER_ID = ""
 if OWNER_ID ~= "" then
-    VIP_USERS[OWNER_ID] = true 
+    VIP_USERS[OWNER_ID] = true
 end
 
 local IS_PREMIUM = VIP_USERS[tostring(LocalPlayer.UserId)] or false
@@ -83,13 +83,13 @@ NotifLayout.Padding = UDim.new(0, 10)
 NotifLayout.Parent = NotifContainer
 
 local function ShowNotification(title, desc, duration, isGold)
-    duration = duration or 5 
+    duration = duration or 5
     local notif = Instance.new("Frame")
     notif.Size = UDim2.new(1, 150, 0, 52)
     notif.BackgroundTransparency = 1
     notif.ZIndex = 1000
     notif.Parent = NotifContainer
-    
+
     local card = Instance.new("Frame")
     card.Size = UDim2.new(1, 0, 1, 0)
     card.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
@@ -97,14 +97,14 @@ local function ShowNotification(title, desc, duration, isGold)
     card.ZIndex = 1001
     card.Parent = notif
     Instance.new("UICorner", card).CornerRadius = UDim.new(0, 6)
-    
+
     local shadow = Instance.new("ImageLabel", card)
     shadow.Name = "Shadow"
     shadow.AnchorPoint = Vector2.new(0.5, 0.5)
     shadow.Position = UDim2.new(0.5, 0, 0.5, 2)
     shadow.Size = UDim2.new(1, 15, 1, 15)
     shadow.BackgroundTransparency = 1
-    shadow.Image = "rbxassetid://6015895133" 
+    shadow.Image = "rbxassetid://6015895133"
     shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
     shadow.ImageTransparency = 0.5
     shadow.ZIndex = 1000
@@ -144,7 +144,7 @@ local function ShowNotification(title, desc, duration, isGold)
     descLbl.TextSize = 10
     descLbl.TextXAlignment = Enum.TextXAlignment.Left
     descLbl.ZIndex = 1002
-    
+
     local timeBar = Instance.new("Frame", card)
     timeBar.Size = UDim2.new(1, 0, 0, 2)
     timeBar.Position = UDim2.new(0, 0, 1, -2)
@@ -152,10 +152,10 @@ local function ShowNotification(title, desc, duration, isGold)
     timeBar.BorderSizePixel = 0
     timeBar.ZIndex = 1003
     Instance.new("UICorner", timeBar).CornerRadius = UDim.new(0, 2)
-    
+
     TweenService:Create(notif, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0, 52)}):Play()
     TweenService:Create(timeBar, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 0, 2)}):Play()
-    
+
     task.delay(duration, function()
         if notif then
             TweenService:Create(card, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
@@ -165,7 +165,6 @@ local function ShowNotification(title, desc, duration, isGold)
             TweenService:Create(descLbl, TweenInfo.new(0.3), {TextTransparency = 1}):Play()
             TweenService:Create(icon, TweenInfo.new(0.3), {TextTransparency = 1}):Play()
             TweenService:Create(timeBar, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
-            
             local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(1, 150, 0, 52)})
             tweenOut:Play()
             tweenOut.Completed:Wait()
@@ -186,18 +185,28 @@ task.spawn(function()
 end)
 
 -- ==========================================================
--- IMPORTER ENGINE FUNCTIONS
+-- IMPORTER ENGINE FUNCTIONS (FIXED v6)
+-- Fix 1: Hapus LocalScript creator -> penyebab error capability
+-- Fix 2: Tinggi TextBox ikut jumlah baris kode (tidak setengah lagi)
+-- Fix 3: Strip HTML dari source Studio Lite
 -- ==========================================================
 local function stripRichText(str)
     if type(str) ~= "string" then return "" end
-    str = str:gsub("<[^<>]+>", ""):gsub("&lt;", "<"):gsub("&gt;", ">"):gsub("&amp;", "&"):gsub("&quot;", '"'):gsub("&apos;", "'"):gsub("&#10;", "\n"):gsub("&#13;", "\r"):gsub("&#9;", "\t"):gsub("\0", "")
+    str = str:gsub("<[^<>]+>", "")
+        :gsub("&lt;", "<"):gsub("&gt;", ">"):gsub("&amp;", "&")
+        :gsub("&quot;", '"'):gsub("&apos;", "'")
+        :gsub("&#10;", "\n"):gsub("&#13;", "\r"):gsub("&#9;", "\t")
+        :gsub("\0", "")
     return str
 end
 
-local function isHTML(str) return type(str) == "string" and str:find("<[%a/][^>]*>") ~= nil end
+local function isHTML(str)
+    return type(str) == "string" and str:find("<[%a/][^>]*>") ~= nil
+end
 
 local function extractSource(obj)
     local src = ""
+
     pcall(function()
         local tb = obj:FindFirstChild("SL_CodeTextBox")
         if tb and tb:IsA("TextBox") and #tb.Text > 0 then src = tb.Text end
@@ -222,75 +231,140 @@ local function extractSource(obj)
             if s and #s > 0 then src = s end
         end
     end) end
+
     if isHTML(src) then src = stripRichText(src) end
     src = src:gsub("\0", "")
     if src == "" then src = "-- [ Source kosong ]\nprint('imported')" end
     return src
 end
 
-local function fixTextBoxSize(tb)
-    if not tb or not tb:IsA("TextBox") then return end
-    tb.AutomaticSize    = Enum.AutomaticSize.None
-    tb.Size             = UDim2.new(1, -52, 1, 0)
-    tb.Position         = UDim2.new(0, 52, 0, 0)
-    tb.BackgroundColor3       = Color3.fromRGB(15, 15, 15)
+local function countLines(str)
+    local n = 1
+    for _ in str:gmatch("\n") do n = n + 1 end
+    return n
+end
+
+local function applyTextBoxFix(tb, cleanSrc)
+    local lineCount  = countLines(cleanSrc)
+    local minHeight  = math.max(lineCount * 19 + 40, 200)
+
+    tb.AutomaticSize         = Enum.AutomaticSize.None
+    tb.Size                  = UDim2.new(1, -52, 0, minHeight)
+    tb.Position              = UDim2.new(0, 52, 0, 0)
+    tb.BackgroundColor3      = Color3.fromRGB(15, 15, 15)
     tb.BackgroundTransparency = 0
-    tb.TextColor3      = Color3.fromRGB(210, 210, 210)
-    tb.TextSize        = 14
-    tb.TextXAlignment  = Enum.TextXAlignment.Left
-    tb.TextYAlignment  = Enum.TextYAlignment.Top
-    tb.MultiLine       = true
-    tb.ClearTextOnFocus = false
-    tb.BorderSizePixel = 0
-    tb.ZIndex          = 4
+    tb.TextColor3            = Color3.fromRGB(210, 210, 210)
+    tb.TextSize              = 14
+    tb.TextXAlignment        = Enum.TextXAlignment.Left
+    tb.TextYAlignment        = Enum.TextYAlignment.Top
+    tb.MultiLine             = true
+    tb.ClearTextOnFocus      = false
+    tb.BorderSizePixel       = 0
+    tb.ZIndex                = 4
+
+    -- Pastikan SaveChangesTo ada (wajib untuk Studio Lite)
+    local saveRef = tb:FindFirstChild("SaveChangesTo")
+    if not saveRef then
+        saveRef        = Instance.new("ObjectValue")
+        saveRef.Name   = "SaveChangesTo"
+        saveRef.Value  = tb
+        saveRef.Parent = tb
+    else
+        saveRef.Value = tb
+    end
+
+    -- TIDAK membuat SL_ColorizeAndEditLocal LocalScript
+    -- karena menyebabkan error "lacking capability RunClientScript"
+    -- Studio Lite asli yang akan inject colorizer-nya sendiri
 end
 
 local function injectSource(scriptObj, cleanSrc)
     pcall(function() scriptObj:SetAttribute("Source", cleanSrc) end)
+
     local sv = scriptObj:FindFirstChild("Source")
     if sv and sv:IsA("StringValue") then
         sv.Value = cleanSrc
     else
         if sv then sv:Destroy() end
-        local newSv = Instance.new("StringValue")
-        newSv.Name = "Source"; newSv.Value = cleanSrc; newSv.Parent = scriptObj
+        local newSv    = Instance.new("StringValue")
+        newSv.Name     = "Source"
+        newSv.Value    = cleanSrc
+        newSv.Parent   = scriptObj
     end
+
     local tb = scriptObj:FindFirstChild("SL_CodeTextBox")
+
     if tb and tb:IsA("TextBox") then
+        -- TextBox sudah ada: update text & fix ukuran
         tb.RichText = false
         tb.Text     = cleanSrc
-        fixTextBoxSize(tb)
-        task.delay(0.1, function() pcall(function() tb.RichText = true; local t = tb.Text; tb.Text = ""; tb.Text = t end) end)
+        applyTextBoxFix(tb, cleanSrc)
+
+        task.delay(0.15, function()
+            pcall(function()
+                tb.RichText = true
+                local t = tb.Text
+                tb.Text = ""
+                tb.Text = t
+            end)
+        end)
     else
+        -- Buat TextBox baru sesuai spec Studio Lite
         local newTb = Instance.new("TextBox")
-        newTb.Name              = "SL_CodeTextBox"
-        newTb.RichText          = false
-        newTb.Text              = cleanSrc
-        newTb.MultiLine         = true
-        newTb.ClearTextOnFocus  = false
-        newTb.TextEditable      = true
-        newTb.AutoLocalize      = false
-        newTb.BorderSizePixel   = 0
-        newTb.ZIndex            = 4
-        newTb.Size              = UDim2.new(1, -52, 1, 0)
-        newTb.Position          = UDim2.new(0, 52, 0, 0)
-        newTb.AutomaticSize     = Enum.AutomaticSize.None
-        newTb.BackgroundColor3      = Color3.fromRGB(15, 15, 15)
+        newTb.Name               = "SL_CodeTextBox"
+        newTb.RichText           = false
+        newTb.Text               = cleanSrc
+        newTb.MultiLine          = true
+        newTb.ClearTextOnFocus   = false
+        newTb.TextEditable        = true
+        newTb.AutoLocalize       = false
+        newTb.BorderSizePixel    = 0
+        newTb.ZIndex             = 4
+        newTb.AutomaticSize      = Enum.AutomaticSize.None
+        newTb.BackgroundColor3       = Color3.fromRGB(15, 15, 15)
         newTb.BackgroundTransparency = 0
-        newTb.TextColor3            = Color3.fromRGB(210, 210, 210)
-        newTb.TextSize              = 14
-        pcall(function() newTb.FontFace = Font.new("rbxasset://fonts/families/Inconsolata.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal) end)
-        if newTb.Font == Enum.Font.Legacy then newTb.Font = Enum.Font.Code end
-        newTb.TextXAlignment = Enum.TextXAlignment.Left
-        newTb.TextYAlignment = Enum.TextYAlignment.Top
-        local colorize = Instance.new("LocalScript")
-        colorize.Name = "SL_ColorizeAndEditLocal"; colorize.Parent = newTb
-        local saveRef = Instance.new("ObjectValue")
-        saveRef.Name = "SaveChangesTo"; saveRef.Value = newTb; saveRef.Parent = newTb
+        newTb.TextColor3             = Color3.fromRGB(210, 210, 210)
+        newTb.TextSize               = 14
+        newTb.TextXAlignment         = Enum.TextXAlignment.Left
+        newTb.TextYAlignment         = Enum.TextYAlignment.Top
+
+        pcall(function()
+            newTb.FontFace = Font.new(
+                "rbxasset://fonts/families/Inconsolata.json",
+                Enum.FontWeight.Regular,
+                Enum.FontStyle.Normal
+            )
+        end)
+        if newTb.Font == Enum.Font.Legacy then
+            newTb.Font = Enum.Font.Code
+        end
+
+        -- SaveChangesTo wajib ada, LocalScript TIDAK dibuat
+        local saveRef       = Instance.new("ObjectValue")
+        saveRef.Name        = "SaveChangesTo"
+        saveRef.Value       = newTb
+        saveRef.Parent      = newTb
+
         newTb.Parent = scriptObj
-        task.delay(0.2, function() pcall(function() newTb.RichText = true end) end)
+        applyTextBoxFix(newTb, cleanSrc)
+
+        task.delay(0.2, function()
+            pcall(function() newTb.RichText = true end)
+        end)
     end
-    task.delay(0.3, function() pcall(function() for _, desc in ipairs(scriptObj:GetDescendants()) do if desc.Name == "SL_CodeTextBox" and desc:IsA("TextBox") then fixTextBoxSize(desc) end end end) end)
+
+    -- Fix ukuran semua descendant SL_CodeTextBox juga
+    task.delay(0.35, function()
+        pcall(function()
+            for _, desc in ipairs(scriptObj:GetDescendants()) do
+                if desc.Name == "SL_CodeTextBox" and desc:IsA("TextBox") then
+                    local src2 = desc.Text ~= "" and desc.Text or cleanSrc
+                    if isHTML(src2) then src2 = stripRichText(src2) end
+                    applyTextBoxFix(desc, src2)
+                end
+            end
+        end)
+    end)
 end
 
 local function safeList(p)
@@ -298,8 +372,10 @@ local function safeList(p)
     local ok, r = pcall(listfiles, p)
     return ok and r or nil
 end
+
 local function fileName(p) return p:match("([^/\\]+)$") or p end
-local PATHS = {"workspace","Delta/workspace","Android/Delta/workspace","../workspace",""}
+
+local PATHS = {"workspace", "Delta/workspace", "Android/Delta/workspace", "../workspace", ""}
 
 local function scanAll()
     local out, seen = {}, {}
@@ -309,7 +385,8 @@ local function scanAll()
             for _, fp in ipairs(list) do
                 local n = fileName(fp)
                 if n:lower():match("%.rbxm$") and not seen[n] then
-                    seen[n] = true; table.insert(out, {name=n, path=fp})
+                    seen[n] = true
+                    table.insert(out, {name = n, path = fp})
                 end
             end
         end
@@ -321,22 +398,139 @@ local function doImport(filePath, fname)
     if not getcustomasset then return false, "Executor tidak mendukung getcustomasset." end
     local ok, err = pcall(function()
         local url = getcustomasset(filePath) or getcustomasset(fname)
-        if not url then error("getcustomasset gagal: "..tostring(filePath)) end
+        if not url then error("getcustomasset gagal: " .. tostring(filePath)) end
+
         local objects = game:GetObjects(url)
         local folder  = Instance.new("Folder")
-        folder.Name   = "Imported_"..fname:gsub("%.rbxm$","")
+        folder.Name   = "Imported_" .. fname:gsub("%.rbxm$", "")
+
+        -- =====================================================
+        -- PHYSICS PROPERTY ENGINE v5
+        -- executor tidak load Anchored/CanCollide dari rbxm.
+        -- Studio Lite simpan nilai asli di SL_Anchored & SL_CanCollide.
+        -- Kita baca attribute itu dan apply ke property.
+        -- Untuk file non-Studio-Lite: default Anchored=true, CanCollide ikut Roblox.
+        -- =====================================================
+
+        local function applyProps(part)
+            if not part:IsA("BasePart") then return end
+            pcall(function()
+                -- === ANCHORED ===
+                -- Baca SL_Anchored (Studio Lite attribute)
+                local slAnchored = part:GetAttribute("SL_Anchored")
+                if slAnchored ~= nil then
+                    -- Pakai nilai asli dari Studio Lite
+                    part.Anchored = slAnchored
+                else
+                    -- Tidak ada SL_Anchored = file bukan dari Studio Lite
+                    -- Default: anchor semua agar tidak jatuh
+                    part.Anchored = true
+                end
+
+                -- === CANCOLLIDE ===
+                -- Baca SL_CanCollide (Studio Lite attribute)
+                local slCanCollide = part:GetAttribute("SL_CanCollide")
+                if slCanCollide ~= nil then
+                    -- Pakai nilai asli dari Studio Lite
+                    part.CanCollide = slCanCollide
+                end
+                -- Jika tidak ada SL_CanCollide: biarkan default Roblox (true)
+            end)
+        end
+
+        local function applyDeep(root)
+            applyProps(root)
+            for _, desc in ipairs(root:GetDescendants()) do
+                applyProps(desc)
+            end
+        end
+
+        -- Process semua objects dari file
         for _, obj in ipairs(objects) do
             if obj.ClassName == "CoreGui" or obj:IsA("ServiceProvider") then
                 pcall(function() obj:Destroy() end)
             else
+                -- Apply props sebelum di-parent (physics belum jalan)
+                applyDeep(obj)
+
                 obj.Parent = folder
+
+                -- Apply lagi setelah di-parent
+                applyDeep(obj)
+
                 for _, desc in ipairs(obj:GetDescendants()) do
-                    if desc:IsA("LuaSourceContainer") then injectSource(desc, extractSource(desc)) end
+                    if desc:IsA("LuaSourceContainer") then
+                        injectSource(desc, extractSource(desc))
+                    end
                 end
-                if obj:IsA("LuaSourceContainer") then injectSource(obj, extractSource(obj)) end
+                if obj:IsA("LuaSourceContainer") then
+                    injectSource(obj, extractSource(obj))
+                end
             end
         end
+
+        -- Apply ke seluruh folder sebelum masuk workspace
+        applyDeep(folder)
+
+        -- DescendantAdded: handle part yang load async
+        local descConn = folder.DescendantAdded:Connect(function(desc)
+            if desc:IsA("BasePart") then
+                applyProps(desc)
+                task.defer(function() applyProps(desc) end)
+                task.delay(0.1, function() applyProps(desc) end)
+                task.delay(0.5, function() applyProps(desc) end)
+            end
+        end)
+
+        -- Masuk workspace
         folder.Parent = workspace
+
+        -- Apply lagi setelah masuk workspace
+        applyDeep(folder)
+
+        -- Monitor loop: 60fps selama 5 detik
+        -- Setiap part yang property-nya berubah, langsung re-apply dari SL_ attribute
+        task.spawn(function()
+            local elapsed = 0
+            while elapsed < 5 do
+                task.wait(1/60)
+                elapsed = elapsed + (1/60)
+                if not folder or not folder.Parent then break end
+                pcall(function()
+                    for _, desc in ipairs(folder:GetDescendants()) do
+                        if desc:IsA("BasePart") then
+                            local slA = desc:GetAttribute("SL_Anchored")
+                            local slC = desc:GetAttribute("SL_CanCollide")
+
+                            -- Fix Anchored
+                            if slA ~= nil then
+                                if desc.Anchored ~= slA then
+                                    desc.Anchored = slA
+                                end
+                            elseif not desc.Anchored then
+                                -- Non-SL file: pastikan tidak jatuh
+                                desc.Anchored = true
+                            end
+
+                            -- Fix CanCollide
+                            if slC ~= nil and desc.CanCollide ~= slC then
+                                desc.CanCollide = slC
+                            end
+                        end
+                    end
+                end)
+            end
+
+            -- Setelah 5 detik: monitor lebih jarang (setiap 2 detik, 30 kali)
+            for i = 1, 30 do
+                task.wait(2)
+                if not folder or not folder.Parent then break end
+                pcall(function() applyDeep(folder) end)
+            end
+
+            pcall(function() descConn:Disconnect() end)
+        end)
+
         task.delay(0.5, function() pcall(function()
             local gui   = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("StudioGui")
             local panel = gui and gui:FindFirstChild("ExplorerPanel")
@@ -347,18 +541,168 @@ local function doImport(filePath, fname)
     return ok, tostring(err)
 end
 
+-- ==========================================================
+-- SAVE / LOAD ENGINE (Studio Lite Compatible)
+-- ==========================================================
+
+local SLEvent = nil
+pcall(function()
+    local rs = game:GetService("ReplicatedStorage")
+    local slf = rs:FindFirstChild("StudioLiteFolder")
+    if slf then
+        SLEvent = slf:FindFirstChild("ServerFunctions")
+    end
+end)
+
+local function color3ToSL(c)
+    return {Scale=255, R=math.round(c.R*255), G=math.round(c.G*255), B=math.round(c.B*255)}
+end
+
+local function cframeToSL(cf)
+    local x,y,z,r00,r01,r02,r10,r11,r12,r20,r21,r22 = cf:GetComponents()
+    return {X=x,Y=y,Z=z,R00=r00,R01=r01,R02=r02,R10=r10,R11=r11,R12=r12,R20=r20,R21=r21,R22=r22}
+end
+
+local function vec3ToSL(v)
+    return {X=v.X, Y=v.Y, Z=v.Z}
+end
+
+local function partToSL(part)
+    return {
+        ClassName     = part.ClassName,
+        Name          = part.Name,
+        CFrame        = cframeToSL(part.CFrame),
+        Size          = vec3ToSL(part.Size),
+        Anchored      = part.Anchored,
+        SL_Anchored   = part:GetAttribute("SL_Anchored"),
+        CanCollide    = part.CanCollide,
+        SL_CanCollide = part:GetAttribute("SL_CanCollide"),
+        Color         = color3ToSL(part.Color),
+        Transparency  = part.Transparency,
+        Locked        = part.Locked,
+        Archivable    = part.Archivable,
+    }
+end
+
+-- Forward declare dulu agar bisa saling memanggil
+local objectToSL
+
+objectToSL = function(obj)
+    local t = {ClassName = obj.ClassName, Name = obj.Name}
+
+    if obj:IsA("BasePart") then
+        t = partToSL(obj)
+    elseif obj:IsA("Model") then
+        if obj.PrimaryPart then
+            t.WorldPivot = cframeToSL(obj:GetPivot())
+        end
+    elseif obj:IsA("LuaSourceContainer") then
+        local src = ""
+        pcall(function()
+            local tb = obj:FindFirstChild("SL_CodeTextBox")
+            if tb and tb:IsA("TextBox") then src = tb.Text end
+        end)
+        t.Source = src
+    end
+
+    -- Rekursif children (kecuali BasePart sudah handle sendiri)
+    if not obj:IsA("BasePart") then
+        for _, child in ipairs(obj:GetChildren()) do
+            if child:IsA("BasePart") or child:IsA("Model")
+            or child:IsA("Folder") or child:IsA("LuaSourceContainer") then
+                t[child.Name] = objectToSL(child)
+            end
+        end
+    end
+
+    return t
+end
+
+local function buildSLPayload(saveName, targetFolder)
+    local wsData = {
+        Name = "Workspace",
+        ClassName = "Folder",
+        Baseplate = {
+            ClassName="Part", Name="Baseplate",
+            Anchored=true, SL_Anchored=true,
+            Locked=true, SL_CanCollide=true,
+            EnableFluidForces=false,
+            Color={Scale=255,R=91,G=91,B=91},
+            CFrame={R11=1,R01=0,R00=1,R21=0,Y=-8,X=0,R02=0,Z=0,R22=1,R10=0,R20=0,R12=0},
+            Size={Y=16,X=2048,Z=2048},
+        },
+        SpawnLocation = {
+            ClassName="SpawnLocation", Name="SpawnLocation",
+            Anchored=true, SL_Anchored=true, SL_CanCollide=true,
+            CanCollide=false, Duration=0, EnableFluidForces=false,
+            CFrame={R11=1,R01=0,R00=1,R21=0,Y=0.5,X=0,R02=0,Z=0,R22=1,R10=0,R20=0,R12=0},
+            Size={Y=1,X=12,Z=12},
+        },
+    }
+
+    -- Masukkan semua isi targetFolder ke wsData
+    for _, child in ipairs(targetFolder:GetChildren()) do
+        wsData[child.Name] = objectToSL(child)
+    end
+
+    return {
+        Name      = saveName,
+        ClassName = "Folder",
+        Workspace = wsData,
+        Lighting  = {
+            Name="Lighting", ClassName="Folder",
+            Brightness=3.1352660655975, ClockTime=14.5,
+            TimeOfDay="14:30:00", GlobalShadows=true,
+            EnvironmentDiffuseScale=1, EnvironmentSpecularScale=1,
+            ExposureCompensation=0, FogEnd=100000, FogStart=0,
+            ShadowSoftness=0.20000000298023, Archivable=true,
+            SL_Technology="Enum.Technology.Future",
+            Ambient={Scale=255,R=70,G=70,B=70},
+            OutdoorAmbient={Scale=255,R=70,G=70,B=70},
+            ColorShift_Bottom={Scale=255,R=0,G=0,B=0},
+            ColorShift_Top={Scale=255,R=0,G=0,B=0},
+            FogColor={Scale=255,R=192,G=192,B=192},
+        },
+        Teams = {Name="Teams", ClassName="Folder"},
+        StarterPlayer = {
+            Name="StarterPlayer", ClassName="Folder",
+            CharacterWalkSpeed=16, CharacterMaxSlopeAngle=89,
+            CharacterJumpHeight=7.2000918388367,
+            CameraMaxZoomDistance=128, CameraMinZoomDistance=0.5,
+            HealthDisplayDistance=100, NameDisplayDistance=100,
+            AutoJumpEnabled=true, LoadCharacterAppearance=true,
+            CharacterUseJumpPower=false,
+            CameraMode={EnumType="CameraMode", Name="Classic"},
+        },
+    }
+end
+
+local function doSave(saveName, targetFolder)
+    if not SLEvent then
+        return false, "Studio Lite tidak ditemukan di game ini."
+    end
+    if not targetFolder or not targetFolder.Parent then
+        return false, "Folder tidak valid."
+    end
+    local ok, err = pcall(function()
+        local payload = buildSLPayload(saveName, targetFolder)
+        SLEvent:InvokeServer("Save", payload, "2", "", false)
+    end)
+    return ok, tostring(err)
+end
+
+
 local function ApplyGoldShine(element)
     element.TextColor3 = Color3.fromRGB(255, 255, 255)
     local grad = Instance.new("UIGradient", element)
     grad.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 180, 0)),
+        ColorSequenceKeypoint.new(0,   Color3.fromRGB(255, 180, 0)),
         ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 200, 0)),
         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 180)),
         ColorSequenceKeypoint.new(0.6, Color3.fromRGB(255, 200, 0)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 180, 0))
+        ColorSequenceKeypoint.new(1,   Color3.fromRGB(255, 180, 0))
     })
     grad.Rotation = 45
-
     task.spawn(function()
         while task.wait() do
             if not element.Parent then break end
@@ -384,7 +728,6 @@ ToggleButton.Active = true
 ToggleButton.Draggable = true
 ToggleButton.ZIndex = 50
 ToggleButton.Parent = ScreenGui
-
 Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 10)
 
 local ToggleStroke = Instance.new("UIStroke", ToggleButton)
@@ -393,9 +736,9 @@ ToggleStroke.Color = Color3.fromRGB(255, 255, 255)
 
 local ToggleGradient = Instance.new("UIGradient", ToggleStroke)
 ToggleGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(150, 10, 10)),
+    ColorSequenceKeypoint.new(0,   Color3.fromRGB(150, 10, 10)),
     ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 10, 10))
+    ColorSequenceKeypoint.new(1,   Color3.fromRGB(150, 10, 10))
 })
 
 task.spawn(function()
@@ -417,9 +760,7 @@ MainPanel.Active = true
 MainPanel.Draggable = true
 MainPanel.ZIndex = 50
 MainPanel.Parent = ScreenGui
-
-local MainCorner = Instance.new("UICorner", MainPanel)
-MainCorner.CornerRadius = UDim.new(0, 10)
+Instance.new("UICorner", MainPanel).CornerRadius = UDim.new(0, 10)
 
 local MainStroke = Instance.new("UIStroke", MainPanel)
 MainStroke.Thickness = 2
@@ -443,9 +784,8 @@ SideBar.BackgroundColor3 = Color3.fromRGB(18, 12, 12)
 SideBar.BorderSizePixel = 0
 SideBar.ZIndex = 50
 SideBar.Parent = MainPanel
+Instance.new("UICorner", SideBar).CornerRadius = UDim.new(0, 10)
 
-local SideBarCorner = Instance.new("UICorner", SideBar)
-SideBarCorner.CornerRadius = UDim.new(0, 10)
 local SideBarFiller = Instance.new("Frame")
 SideBarFiller.Size = UDim2.new(0, 15, 1, 0)
 SideBarFiller.Position = UDim2.new(1, -15, 0, 0)
@@ -492,9 +832,9 @@ Divider.BorderSizePixel = 0
 Divider.ZIndex = 52
 local DivGrad = Instance.new("UIGradient", Divider)
 DivGrad.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(18, 12, 12)),
+    ColorSequenceKeypoint.new(0,   Color3.fromRGB(18, 12, 12)),
     ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 40, 40)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(18, 12, 12))
+    ColorSequenceKeypoint.new(1,   Color3.fromRGB(18, 12, 12))
 })
 
 local CurrentTab = "Assets"
@@ -516,7 +856,8 @@ end
 
 local BtnAssets = CreateNavButton("📁 ASSETS", 90, true)
 local BtnVip    = CreateNavButton("💎 VIP MENU", 130, false)
-local BtnRescan = CreateNavButton("🔄 RESCAN", 175, false)
+local BtnSave   = CreateNavButton("💾 SAVE/LOAD", 175, false)
+local BtnRescan = CreateNavButton("🔄 RESCAN", 220, false)
 
 local ProfileFrame = Instance.new("Frame")
 ProfileFrame.Size = UDim2.new(1, -20, 0, 45)
@@ -533,7 +874,11 @@ AvatarImg.ZIndex = 52
 Instance.new("UICorner", AvatarImg).CornerRadius = UDim.new(1, 0)
 task.spawn(function()
     pcall(function()
-        local content = game:GetService("Players"):GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+        local content = game:GetService("Players"):GetUserThumbnailAsync(
+            LocalPlayer.UserId,
+            Enum.ThumbnailType.HeadShot,
+            Enum.ThumbnailSize.Size420x420
+        )
         AvatarImg.Image = content
     end)
 end)
@@ -548,12 +893,7 @@ ProfName.TextSize = 12
 ProfName.TextXAlignment = Enum.TextXAlignment.Left
 ProfName.TextTruncate = Enum.TextTruncate.AtEnd
 ProfName.ZIndex = 52
-
-if IS_PREMIUM then
-    ApplyGoldShine(ProfName)
-else
-    ProfName.TextColor3 = Color3.fromRGB(255, 255, 255)
-end
+if IS_PREMIUM then ApplyGoldShine(ProfName) else ProfName.TextColor3 = Color3.fromRGB(255, 255, 255) end
 
 local ProfUser = Instance.new("TextLabel", ProfileFrame)
 ProfUser.Size = UDim2.new(1, -45, 0, 12)
@@ -577,6 +917,181 @@ ProfID.Font = Enum.Font.GothamBold
 ProfID.TextSize = 9
 ProfID.TextXAlignment = Enum.TextXAlignment.Left
 ProfID.ZIndex = 52
+
+-- Save/Load Frame
+local SaveFrame = Instance.new("Frame", MainPanel)
+SaveFrame.Size = UDim2.new(1, -160, 1, 0)
+SaveFrame.Position = UDim2.new(0, 160, 0, 0)
+SaveFrame.BackgroundTransparency = 1
+SaveFrame.Visible = false
+SaveFrame.ZIndex = 50
+
+local SaveTitle = Instance.new("TextLabel", SaveFrame)
+SaveTitle.Size = UDim2.new(1, -20, 0, 25)
+SaveTitle.Position = UDim2.new(0, 20, 0, 15)
+SaveTitle.BackgroundTransparency = 1
+SaveTitle.Text = "💾 Save / Load"
+SaveTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+SaveTitle.Font = Enum.Font.GothamBlack
+SaveTitle.TextSize = 18
+SaveTitle.TextXAlignment = Enum.TextXAlignment.Left
+SaveTitle.ZIndex = 51
+
+local SaveSub = Instance.new("TextLabel", SaveFrame)
+SaveSub.Size = UDim2.new(1, -20, 0, 15)
+SaveSub.Position = UDim2.new(0, 20, 0, 38)
+SaveSub.BackgroundTransparency = 1
+SaveSub.Text = "Save & load project ke Studio Lite"
+SaveSub.TextColor3 = Color3.fromRGB(150, 150, 150)
+SaveSub.Font = Enum.Font.Gotham
+SaveSub.TextSize = 11
+SaveSub.TextXAlignment = Enum.TextXAlignment.Left
+SaveSub.ZIndex = 51
+
+-- Input nama save
+local SaveNameBox = Instance.new("TextBox", SaveFrame)
+SaveNameBox.Size = UDim2.new(1, -40, 0, 32)
+SaveNameBox.Position = UDim2.new(0, 20, 0, 68)
+SaveNameBox.BackgroundColor3 = Color3.fromRGB(22, 16, 16)
+SaveNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+SaveNameBox.PlaceholderText = "Nama save (contoh: MyProject)"
+SaveNameBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+SaveNameBox.Text = ""
+SaveNameBox.Font = Enum.Font.Gotham
+SaveNameBox.TextSize = 12
+SaveNameBox.ClearTextOnFocus = false
+SaveNameBox.ZIndex = 52
+SaveNameBox.BorderSizePixel = 0
+Instance.new("UICorner", SaveNameBox).CornerRadius = UDim.new(0, 6)
+Instance.new("UIStroke", SaveNameBox).Color = Color3.fromRGB(80, 30, 30)
+
+-- Label pilih folder
+local FolderLabel = Instance.new("TextLabel", SaveFrame)
+FolderLabel.Size = UDim2.new(1, -40, 0, 15)
+FolderLabel.Position = UDim2.new(0, 20, 0, 108)
+FolderLabel.BackgroundTransparency = 1
+FolderLabel.Text = "Pilih folder Imported_ yang mau disave:"
+FolderLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+FolderLabel.Font = Enum.Font.Gotham
+FolderLabel.TextSize = 10
+FolderLabel.TextXAlignment = Enum.TextXAlignment.Left
+FolderLabel.ZIndex = 51
+
+-- Scroll list folder imported
+local FolderScroll = Instance.new("ScrollingFrame", SaveFrame)
+FolderScroll.Size = UDim2.new(1, -40, 0, 80)
+FolderScroll.Position = UDim2.new(0, 20, 0, 125)
+FolderScroll.BackgroundColor3 = Color3.fromRGB(16, 12, 12)
+FolderScroll.BorderSizePixel = 0
+FolderScroll.ScrollBarThickness = 3
+FolderScroll.ScrollBarImageColor3 = Color3.fromRGB(200, 40, 40)
+FolderScroll.ZIndex = 52
+Instance.new("UICorner", FolderScroll).CornerRadius = UDim.new(0, 6)
+
+local FolderList = Instance.new("UIListLayout", FolderScroll)
+FolderList.Padding = UDim.new(0, 4)
+FolderList.SortOrder = Enum.SortOrder.LayoutOrder
+FolderList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    FolderScroll.CanvasSize = UDim2.new(0, 0, 0, FolderList.AbsoluteContentSize.Y + 6)
+end)
+
+local selectedFolder = nil
+local selectedFolderBtn = nil
+
+local function refreshFolderList()
+    for _, c in pairs(FolderScroll:GetChildren()) do
+        if c:IsA("TextButton") then c:Destroy() end
+    end
+    selectedFolder = nil
+    selectedFolderBtn = nil
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Folder") and obj.Name:sub(1, 9) == "Imported_" then
+            local btn = Instance.new("TextButton", FolderScroll)
+            btn.Size = UDim2.new(1, -6, 0, 24)
+            btn.BackgroundColor3 = Color3.fromRGB(28, 20, 20)
+            btn.BorderSizePixel = 0
+            btn.Text = "  📁 " .. obj.Name
+            btn.TextColor3 = Color3.fromRGB(210, 210, 210)
+            btn.Font = Enum.Font.Gotham
+            btn.TextSize = 11
+            btn.TextXAlignment = Enum.TextXAlignment.Left
+            btn.ZIndex = 53
+            Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 4)
+            btn.MouseButton1Click:Connect(function()
+                if selectedFolderBtn then
+                    selectedFolderBtn.BackgroundColor3 = Color3.fromRGB(28, 20, 20)
+                    selectedFolderBtn.TextColor3 = Color3.fromRGB(210, 210, 210)
+                end
+                selectedFolder = obj
+                selectedFolderBtn = btn
+                btn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+                btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+                -- Auto-isi nama save dari nama folder
+                if SaveNameBox.Text == "" then
+                    SaveNameBox.Text = obj.Name:gsub("Imported_", "")
+                end
+            end)
+        end
+    end
+end
+
+-- Tombol Save
+local DoSaveBtn = Instance.new("TextButton", SaveFrame)
+DoSaveBtn.Size = UDim2.new(1, -40, 0, 30)
+DoSaveBtn.Position = UDim2.new(0, 20, 0, 215)
+DoSaveBtn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+DoSaveBtn.BorderSizePixel = 0
+DoSaveBtn.Text = "💾  SAVE KE STUDIO LITE"
+DoSaveBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DoSaveBtn.Font = Enum.Font.GothamBold
+DoSaveBtn.TextSize = 12
+DoSaveBtn.ZIndex = 52
+Instance.new("UICorner", DoSaveBtn).CornerRadius = UDim.new(0, 6)
+
+DoSaveBtn.MouseButton1Click:Connect(function()
+    CheckSecurity()
+    local saveName = SaveNameBox.Text
+    if saveName == "" then
+        ShowNotification("ERROR", "Isi nama save dulu!", 4, false)
+        return
+    end
+    if not selectedFolder then
+        ShowNotification("ERROR", "Pilih folder Imported_ dulu!", 4, false)
+        return
+    end
+    DoSaveBtn.Text = "⏳ Saving..."
+    DoSaveBtn.BackgroundColor3 = Color3.fromRGB(100, 80, 0)
+    task.spawn(function()
+        local ok, msg = doSave(saveName, selectedFolder)
+        if ok then
+            DoSaveBtn.BackgroundColor3 = Color3.fromRGB(35, 170, 70)
+            DoSaveBtn.Text = "✓ SAVED!"
+            ShowNotification("SAVE", "Project berhasil disave: " .. saveName, 5, IS_PREMIUM)
+        else
+            DoSaveBtn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+            DoSaveBtn.Text = "✗ GAGAL"
+            ShowNotification("ERROR", "Gagal save: " .. tostring(msg):sub(1,40), 6, false)
+            warn("[Save]", msg)
+        end
+        task.wait(2)
+        DoSaveBtn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+        DoSaveBtn.Text = "💾  SAVE KE STUDIO LITE"
+    end)
+end)
+
+-- Status info
+local SaveInfo = Instance.new("TextLabel", SaveFrame)
+SaveInfo.Size = UDim2.new(1, -40, 0, 30)
+SaveInfo.Position = UDim2.new(0, 20, 0, 255)
+SaveInfo.BackgroundTransparency = 1
+SaveInfo.Text = "ℹ️ Save otomatis ke sistem Studio Lite.
+Bisa diload ulang dari menu Studio Lite."
+SaveInfo.TextColor3 = Color3.fromRGB(120, 120, 120)
+SaveInfo.Font = Enum.Font.Gotham
+SaveInfo.TextSize = 10
+SaveInfo.TextXAlignment = Enum.TextXAlignment.Left
+SaveInfo.TextWrapped = true
+SaveInfo.ZIndex = 51
 
 local ContentFrame = Instance.new("Frame", MainPanel)
 ContentFrame.Size = UDim2.new(1, -160, 1, 0)
@@ -663,7 +1178,6 @@ if IS_PREMIUM then
     LimitValueText.Size = UDim2.new(1, -15, 0, 20)
     LimitValueText.Position = UDim2.new(0, 15, 0, 5)
     ApplyGoldShine(LimitValueText)
-
     LimitTitle.Text = "Kamu bisa import terus menerus tanpa batas."
     LimitTitle.TextColor3 = Color3.fromRGB(160, 160, 160)
     LimitTitle.TextSize = 9
@@ -676,7 +1190,6 @@ else
     LimitValueText.TextSize = 18
     LimitValueText.Size = UDim2.new(1, -15, 0, 25)
     LimitValueText.Position = UDim2.new(0, 15, 0, 8)
-
     LimitTitle.Text = "Daily Imports"
     LimitTitle.TextColor3 = Color3.fromRGB(160, 160, 160)
     LimitTitle.TextSize = 10
@@ -726,7 +1239,6 @@ VipTitle.Font = Enum.Font.GothamBlack
 VipTitle.TextSize = 18
 VipTitle.TextXAlignment = Enum.TextXAlignment.Left
 VipTitle.ZIndex = 51
-
 ApplyGoldShine(VipTitle)
 
 local VipSub = Instance.new("TextLabel", VipFrame)
@@ -802,16 +1314,13 @@ BuyBtn.Font = Enum.Font.GothamBold
 BuyBtn.TextSize = 13
 BuyBtn.ZIndex = 52
 Instance.new("UICorner", BuyBtn).CornerRadius = UDim.new(0, 6)
-
 BuyBtn.MouseEnter:Connect(function() TweenService:Create(BuyBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(220, 40, 40)}):Play() end)
 BuyBtn.MouseLeave:Connect(function() TweenService:Create(BuyBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(180, 30, 30)}):Play() end)
-
 BuyBtn.MouseButton1Click:Connect(function()
     CheckSecurity()
-    local waNumber = "6280000000000" 
+    local waNumber  = "6280000000000"
     local waMessage = "Halo+bang,+saya+mau+beli+VIP+Afterlife+Project.+ID+Roblox+saya:+" .. tostring(LocalPlayer.UserId)
-    local waLink = "https://wa.me/" .. waNumber .. "?text=" .. waMessage
-
+    local waLink    = "https://wa.me/" .. waNumber .. "?text=" .. waMessage
     if setclipboard then
         setclipboard(waLink)
         BuyBtn.Text = "LINK WA TERSALIN!"
@@ -831,21 +1340,29 @@ local isAnimating = false
 
 local function SwitchTab(tabName)
     CurrentTab = tabName
+    ContentFrame.Visible = false
+    VipFrame.Visible     = false
+    SaveFrame.Visible    = false
+    BtnAssets.BackgroundColor3 = Color3.fromRGB(25, 18, 18)
+    BtnVip.BackgroundColor3    = Color3.fromRGB(25, 18, 18)
+    BtnSave.BackgroundColor3   = Color3.fromRGB(25, 18, 18)
+
     if tabName == "Assets" then
         BtnAssets.BackgroundColor3 = Color3.fromRGB(220, 25, 25)
-        BtnVip.BackgroundColor3 = Color3.fromRGB(25, 18, 18)
         ContentFrame.Visible = true
-        VipFrame.Visible = false
     elseif tabName == "Vip" then
         BtnVip.BackgroundColor3 = Color3.fromRGB(220, 25, 25)
-        BtnAssets.BackgroundColor3 = Color3.fromRGB(25, 18, 18)
-        ContentFrame.Visible = false
         VipFrame.Visible = true
+    elseif tabName == "Save" then
+        BtnSave.BackgroundColor3 = Color3.fromRGB(220, 25, 25)
+        SaveFrame.Visible = true
+        refreshFolderList()
     end
 end
 
 BtnAssets.MouseButton1Click:Connect(function() SwitchTab("Assets") end)
 BtnVip.MouseButton1Click:Connect(function() SwitchTab("Vip") end)
+BtnSave.MouseButton1Click:Connect(function() SwitchTab("Save") end)
 
 local function UpdateHover(btn, tabName)
     btn.MouseEnter:Connect(function()
@@ -855,21 +1372,19 @@ local function UpdateHover(btn, tabName)
         if CurrentTab ~= tabName then TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(25, 18, 18)}):Play() end
     end)
 end
-
 UpdateHover(BtnAssets, "Assets")
 UpdateHover(BtnVip, "Vip")
+UpdateHover(BtnSave, "Save")
 UpdateHover(BtnRescan, "Rescan")
 
 ToggleButton.MouseButton1Click:Connect(function()
     if isAnimating then return end
     isAnimating = true
     CheckSecurity()
-    
     MainPanel.Size = UDim2.new(0, 480, 0, 280)
     MainPanel.Position = UDim2.new(0.5, -240, 0.5, -140)
     MainPanel.Visible = true
     ToggleButton.Visible = false
-    
     local tween = TweenService:Create(MainPanel, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
         Size = UDim2.new(0, 530, 0, 330),
         Position = UDim2.new(0.5, -265, 0.5, -165)
@@ -883,15 +1398,13 @@ CloseBtn.MouseButton1Click:Connect(function()
     if isAnimating then return end
     isAnimating = true
     CheckSecurity()
-    
     local tween = TweenService:Create(MainPanel, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
         Size = UDim2.new(0, 480, 0, 280),
         Position = UDim2.new(0.5, -240, 0.5, -140)
     })
     tween:Play()
     tween.Completed:Wait()
-    
-    MainPanel.Visible = false
+    MainPanel.Visible    = false
     ToggleButton.Visible = true
     isAnimating = false
 end)
@@ -902,10 +1415,9 @@ local function CreateAssetItem(fileName, filePath)
     item.BackgroundColor3 = Color3.fromRGB(20, 16, 16)
     item.ZIndex = 52
     Instance.new("UICorner", item).CornerRadius = UDim.new(0, 6)
-    
     item.MouseEnter:Connect(function() TweenService:Create(item, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(28, 22, 22)}):Play() end)
     item.MouseLeave:Connect(function() TweenService:Create(item, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(20, 16, 16)}):Play() end)
-    
+
     local icon = Instance.new("TextLabel", item)
     icon.Size = UDim2.new(0, 28, 0, 28)
     icon.Position = UDim2.new(0, 8, 0, 7)
@@ -915,7 +1427,7 @@ local function CreateAssetItem(fileName, filePath)
     icon.TextSize = 14
     icon.ZIndex = 53
     Instance.new("UICorner", icon).CornerRadius = UDim.new(0, 5)
-    
+
     local nameLabel = Instance.new("TextLabel", item)
     nameLabel.Size = UDim2.new(1, -120, 1, 0)
     nameLabel.Position = UDim2.new(0, 45, 0, 0)
@@ -927,7 +1439,7 @@ local function CreateAssetItem(fileName, filePath)
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.TextTruncate = Enum.TextTruncate.AtEnd
     nameLabel.ZIndex = 53
-    
+
     local importBtn = Instance.new("TextButton", item)
     importBtn.Size = UDim2.new(0, 65, 0, 24)
     importBtn.Position = UDim2.new(1, -75, 0, 9)
@@ -950,7 +1462,6 @@ local function CreateAssetItem(fileName, filePath)
     importBtn.MouseButton1Click:Connect(function()
         CheckSecurity()
         if busy then return end
-        
         if not IS_PREMIUM and limitData.count >= MAX_DAILY_LIMIT then
             importBtn.Text = "MAX LIMIT"
             importBtn.BackgroundColor3 = Color3.fromRGB(100, 30, 30)
@@ -960,11 +1471,9 @@ local function CreateAssetItem(fileName, filePath)
             importBtn.Text = "IMPORT"
             return
         end
-
         busy = true
         importBtn.Text = "⏳"
         importBtn.BackgroundColor3 = Color3.fromRGB(200, 100, 0)
-        
         task.spawn(function()
             local ok, msg = doImport(filePath, fileName)
             if ok then
@@ -973,9 +1482,7 @@ local function CreateAssetItem(fileName, filePath)
                     SaveLimitData()
                     LimitValueText.Text = limitData.count .. "/" .. MAX_DAILY_LIMIT
                 end
-                
                 ShowNotification("IMPORT", "SUCCESS IMPORT FILE", 5, IS_PREMIUM)
-                
                 importBtn.BackgroundColor3 = Color3.fromRGB(35, 170, 70)
                 importBtn.Text = "SUCCESS"
             else
@@ -996,10 +1503,8 @@ local function LoadFiles()
     for _, child in pairs(AssetList:GetChildren()) do
         if child:IsA("Frame") then child:Destroy() end
     end
-    
     local files = scanAll()
     local count = 0
-    
     if files then
         for _, fd in ipairs(files) do
             CreateAssetItem(fd.name, fd.path)
